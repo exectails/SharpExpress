@@ -20,7 +20,7 @@ var app = new WebApplication();
 app.Get("/", (req, res) =>
 {
 	res.Send("Hello, World!");
-}
+});
 
 app.Listen(80);
 ```
