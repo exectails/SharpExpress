@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CA72E324-0239-4015-B71E-A08502C0BE8E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SharpExpress</RootNamespace>
+    <AssemblyName>SharpExpress</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controller.cs" />
+    <Compile Include="Engine.cs" />
+    <Compile Include="Engines\HtmlEngine.cs" />
+    <Compile Include="Engines\HandlebarsEngine.cs" />
+    <Compile Include="FormFile.cs" />
+    <Compile Include="3rdParty\HttpMultipartParser\BinaryStreamStack.cs" />
+    <Compile Include="3rdParty\HttpMultipartParser\FilePart.cs" />
+    <Compile Include="3rdParty\HttpMultipartParser\MultipartFormDataParser.cs" />
+    <Compile Include="3rdParty\HttpMultipartParser\MultipartParseException.cs" />
+    <Compile Include="3rdParty\HttpMultipartParser\ParameterPart.cs" />
+    <Compile Include="3rdParty\HttpMultipartParser\RebufferableBinaryReader.cs" />
+    <Compile Include="3rdParty\HttpMultipartParser\SubsequenceFinder.cs" />
+    <Compile Include="3rdParty\mustache-sharp\ArgumentCollection.cs" />
+    <Compile Include="3rdParty\mustache-sharp\CompoundGenerator.cs" />
+    <Compile Include="3rdParty\mustache-sharp\ConditionTagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\ContentTagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\Context.cs" />
+    <Compile Include="3rdParty\mustache-sharp\ContextParameter.cs" />
+    <Compile Include="3rdParty\mustache-sharp\EachTagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\ElifTagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\ElseTagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\FormatCompiler.cs" />
+    <Compile Include="3rdParty\mustache-sharp\Generator.cs" />
+    <Compile Include="3rdParty\mustache-sharp\IArgument.cs" />
+    <Compile Include="3rdParty\mustache-sharp\IfTagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\IGenerator.cs" />
+    <Compile Include="3rdParty\mustache-sharp\IndexTagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\InlineGenerator.cs" />
+    <Compile Include="3rdParty\mustache-sharp\InlineTagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\KeyFoundEventArgs.cs" />
+    <Compile Include="3rdParty\mustache-sharp\KeyGenerator.cs" />
+    <Compile Include="3rdParty\mustache-sharp\KeyNotFoundEventArgs.cs" />
+    <Compile Include="3rdParty\mustache-sharp\MasterTagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\NestedContext.cs" />
+    <Compile Include="3rdParty\mustache-sharp\NewlineTagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\NumberArgument.cs" />
+    <Compile Include="3rdParty\mustache-sharp\PlaceholderArgument.cs" />
+    <Compile Include="3rdParty\mustache-sharp\PlaceholderFoundEventArgs.cs" />
+    <Compile Include="3rdParty\mustache-sharp\PropertyDictionary.cs" />
+    <Compile Include="3rdParty\mustache-sharp\RegexHelper.cs" />
+    <Compile Include="3rdParty\mustache-sharp\Scope.cs" />
+    <Compile Include="3rdParty\mustache-sharp\SetTagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\StaticGenerator.cs" />
+    <Compile Include="3rdParty\mustache-sharp\StringArgument.cs" />
+    <Compile Include="3rdParty\mustache-sharp\TagDefinition.cs" />
+    <Compile Include="3rdParty\mustache-sharp\TagParameter.cs" />
+    <Compile Include="3rdParty\mustache-sharp\UpcastDictionary.cs" />
+    <Compile Include="3rdParty\mustache-sharp\ValueRequestEventArgs.cs" />
+    <Compile Include="3rdParty\mustache-sharp\VariableArgument.cs" />
+    <Compile Include="3rdParty\mustache-sharp\VariableFoundEventArgs.cs" />
+    <Compile Include="3rdParty\mustache-sharp\WithTagDefinition.cs" />
+    <Compile Include="ValueCollection.cs" />
+    <Compile Include="WebApplication.cs" />
+    <Compile Include="Request.cs" />
+    <Compile Include="Response.cs" />
+    <Compile Include="Route.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
