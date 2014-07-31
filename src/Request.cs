@@ -52,6 +52,16 @@ namespace SharpExpress
 		public string UserAgent { get { return _context.Request.UserAgent; } }
 
 		/// <summary>
+		/// Host address the client used in the request
+		/// </summary>
+		public string HttpHost { get { return _context.Request.LocalEndPoint.Address.ToString(); } }
+
+		/// <summary>
+		/// Port the client used in the request
+		/// </summary>
+		public int HttpPort { get { return _context.Request.LocalEndPoint.Port; } }
+
+		/// <summary>
 		/// New request
 		/// </summary>
 		/// <param name="context"></param>
