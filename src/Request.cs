@@ -29,7 +29,7 @@ namespace SharpExpress
 		/// <summary>
 		/// All GET/POST parameters.
 		/// </summary>
-		internal ValueCollection Parameters { get; set; }
+		public ValueCollection Parameters { get; set; }
 
 		/// <summary>
 		/// All files sent via POST.
@@ -111,11 +111,10 @@ namespace SharpExpress
 		/// <returns></returns>
 		public string Cookie(string name, string def = null)
 		{
-			var cookie = _context.Request.Cookies[name];
-			if (cookie == null)
-				return def;
+			if (_context.Request.Cookies.Contains(name))
+				return _context.Request.Cookies[name].Value;
 
-			return cookie.Value;
+			return def;
 		}
 
 		/// <summary>
@@ -126,11 +125,10 @@ namespace SharpExpress
 		/// <returns></returns>
 		public string Parameter(string name, string def = null)
 		{
-			var parameter = this.Parameters[name];
-			if (parameter == null)
-				return def;
+			if (this.Parameters.ContainsKey(name))
+				return this.Parameters[name];
 
-			return parameter;
+			return def;
 		}
 	}
 }

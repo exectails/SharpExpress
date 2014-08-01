@@ -88,6 +88,12 @@ namespace NHttp
 			return result;
 		}
 
+		// added
+		public bool Contains(string name)
+		{
+			return (BaseGet(name) != null);
+		}
+
 		public HttpCookie this[string name]
 		{
 			get { return Get(name); }
