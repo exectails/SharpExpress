@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using NHttp;
 using SharpExpress.Engines;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace SharpExpress
 		private const string DefaultEngine = "_default";
 		private const int DefaultPort = 80;
 
-		private HttpListener _listener;
+		private HttpServer _server;
 		private List<Route> _routes;
 		private Dictionary<string, IEngine> _engines;
 		private HashSet<string> _statics;
@@ -45,7 +46,7 @@ namespace SharpExpress
 		/// </summary>
 		public WebApplication()
 		{
-			_listener = new HttpListener();
+			_server = new HttpServer();
 
 			_routes = new List<Route>();
 
@@ -60,11 +61,11 @@ namespace SharpExpress
 		/// <param name="port"></param>
 		public void Listen(int port = DefaultPort)
 		{
-			_listener.Prefixes.Clear();
-			_listener.Prefixes.Add("http://*:" + port + "/");
+			_server.EndPoint = new IPEndPoint(IPAddress.Any, port);
 
-			_listener.Start();
-			_listener.BeginGetContext(OnRequest, null);
+			_server.RequestReceived += this.OnRequest;
+
+			_server.Start();
 		}
 
 		/// <summary>
@@ -72,17 +73,16 @@ namespace SharpExpress
 		/// </summary>
 		public void Stop()
 		{
-			_listener.Stop();
+			_server.Stop();
 		}
 
 		/// <summary>
 		/// Handles new requests
 		/// </summary>
 		/// <param name="state"></param>
-		protected void OnRequest(object state)
+		protected void OnRequest(object state, HttpRequestEventArgs e)
 		{
-			var context = _listener.EndGetContext(state as IAsyncResult);
-			_listener.BeginGetContext(OnRequest, null);
+			var context = e.Context;
 
 			//Console.WriteLine("{0,-21} {1,-23} {2} {3}", DateTime.Now, context.Request.RemoteEndPoint, context.Request.HttpMethod, context.Request.RawUrl);
 
@@ -109,13 +109,9 @@ namespace SharpExpress
 
 				res.Send();
 			}
-			catch (HttpListenerException)
+			catch (Exception ex)
 			{
-				// unable to send
-			}
-			finally
-			{
-				context.Response.Close();
+				// log
 			}
 		}
 
@@ -142,7 +138,7 @@ namespace SharpExpress
 		public void All(string pattern, ControllerFunc controller) { this.On(new string[] { "get", "post" }, pattern, controller); }
 		public void All(string pattern, IController controller) { this.On(new string[] { "get", "post" }, pattern, controller); }
 
-		private void Route(string rawUrl, HttpListenerContext context, Request req, Response res)
+		private void Route(string rawUrl, HttpContext context, Request req, Response res)
 		{
 			var handled = false;
 
@@ -215,7 +211,7 @@ namespace SharpExpress
 		/// <param name="context"></param>
 		/// <param name="res"></param>
 		/// <returns></returns>
-		private bool TryStatic(string rawUrl, HttpListenerContext context, Response res)
+		private bool TryStatic(string rawUrl, HttpContext context, Response res)
 		{
 			var relativeFilePath = rawUrl.TrimStart('/');
 			var fullFilePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativeFilePath)).Replace('\\', '/');

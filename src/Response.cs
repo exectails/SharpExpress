@@ -13,19 +13,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using NHttp;
 using System;
+using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Net.Mime;
 using System.Text;
-using System.Web;
 
 namespace SharpExpress
 {
 	public class Response
 	{
 		private WebApplication _app;
-		private HttpListenerContext _context;
+		private HttpContext _context;
 
 		public StringBuilder StringBuffer { get; private set; }
 
@@ -52,7 +53,7 @@ namespace SharpExpress
 			set
 			{
 				_context.Response.StatusCode = (int)value;
-				_context.Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(_context.Response.StatusCode);
+				_context.Response.StatusDescription = System.Web.HttpWorkerRequest.GetStatusDescription(_context.Response.StatusCode);
 			}
 		}
 
@@ -66,23 +67,6 @@ namespace SharpExpress
 		}
 
 		/// <summary>
-		/// Status description for the response
-		/// </summary>
-		public WebHeaderCollection Headers
-		{
-			get { return _context.Response.Headers; }
-			set { _context.Response.Headers = value; }
-		}
-
-		/// <summary>
-		/// Cookies sent with  response
-		/// </summary>
-		/// <remarks>
-		/// Setting is buggy, expires doesn't work properly in IE.
-		/// </remarks>
-		//public CookieCollection Cookies { get { return _context.Response.Cookies; } }
-
-		/// <summary>
 		/// Output stream for the response
 		/// </summary>
 		public Stream OutputStream { get { return _context.Response.OutputStream; } }
@@ -92,7 +76,7 @@ namespace SharpExpress
 		/// </summary>
 		/// <param name="context"></param>
 		/// <param name="writer"></param>
-		public Response(WebApplication app, HttpListenerContext context)
+		public Response(WebApplication app, HttpContext context)
 		{
 			_app = app;
 			_context = context;
@@ -164,24 +148,15 @@ namespace SharpExpress
 		/// <param name="expires"></param>
 		public void Cookie(string name, string value, string path, DateTime? expires)
 		{
-			var sb = new StringBuilder();
-
-			//Set-Cookie: <name>=<value>[; <name>=<value>]...
-			//[; expires=<date>][; domain=<domain_name>]
-			//[; path=<some_path>][; secure]
-
-			sb.Append(name + "=" + value);
+			var cookie = new HttpCookie(name, value);
 
 			if (path != "")
-				sb.Append("; Path=" + path);
+				cookie.Path = path;
 
 			if (expires != null)
-			{
-				var date = expires.Value.ToUniversalTime().ToString("ddd, dd-MMM-yyyy H:mm:ss");
-				sb.Append("; Expires=" + date + " GMT");
-			}
+				cookie.Expires = expires.Value.ToUniversalTime();
 
-			this.Headers.Add("Set-Cookie", sb.ToString());
+			_context.Response.Cookies.Add(cookie);
 		}
 
 		/// <summary>
@@ -208,12 +183,11 @@ namespace SharpExpress
 		/// <summary>
 		/// Sends string buffer to client
 		/// </summary>
-		public void Send()
+		internal void Send()
 		{
 			using (var output = _context.Response.OutputStream)
 			{
 				var buffer = Encoding.UTF8.GetBytes(this.StringBuffer.ToString());
-				_context.Response.ContentLength64 = buffer.Length;
 				output.Write(buffer, 0, buffer.Length);
 			}
 		}
@@ -259,7 +233,6 @@ namespace SharpExpress
 			using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
 			using (var output = _context.Response.OutputStream)
 			{
-				_context.Response.ContentLength64 = fs.Length;
 				fs.CopyTo(output);
 			}
 		}

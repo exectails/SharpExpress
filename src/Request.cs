@@ -14,22 +14,22 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using HttpMultipartParser;
+using NHttp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Web;
 
 namespace SharpExpress
 {
 	public class Request
 	{
-		private HttpListenerContext _context;
+		private HttpContext _context;
 
 		/// <summary>
 		/// All GET/POST parameters.
 		/// </summary>
-		public ValueCollection Parameters { get; internal set; }
+		internal ValueCollection Parameters { get; set; }
 
 		/// <summary>
 		/// All files sent via POST.
@@ -65,7 +65,7 @@ namespace SharpExpress
 		/// New request
 		/// </summary>
 		/// <param name="context"></param>
-		public Request(HttpListenerContext context)
+		public Request(HttpContext context)
 		{
 			_context = context;
 			this.Method = _context.Request.HttpMethod.ToUpper();
@@ -80,62 +80,26 @@ namespace SharpExpress
 		/// <summary>
 		/// Reads parameters from URL (GET)
 		/// </summary>
-		/// <param name="listenerRequest"></param>
-		private void ReadQueryString(HttpListenerRequest listenerRequest)
+		/// <param name="request"></param>
+		private void ReadQueryString(HttpRequest request)
 		{
-			foreach (var x in listenerRequest.QueryString.AllKeys)
-			{
-				var key = HttpUtility.UrlDecode(x);
-				var value = HttpUtility.UrlDecode(listenerRequest.QueryString[x] ?? "");
-
-				if (key == null)
-				{
-					key = value;
-					value = "";
-				}
-
-				this.Parameters[key] = value;
-			}
+			foreach (var key in request.QueryString.AllKeys)
+				this.Parameters[key] = request.Params[key];
 		}
 
 		/// <summary>
 		/// Reads parameters from entity body (POST)
 		/// </summary>
-		/// <param name="listenerRequest"></param>
-		private void ReadEntityBody(HttpListenerRequest listenerRequest)
+		/// <param name="request"></param>
+		private void ReadEntityBody(HttpRequest request)
 		{
-			if (!listenerRequest.HasEntityBody)
-				return;
+			foreach (var key in request.Form.AllKeys)
+				this.Parameters[key] = request.Params[key];
 
-			if (listenerRequest.ContentType.ToLower() == "application/x-www-form-urlencoded")
+			foreach (var key in request.Files.AllKeys)
 			{
-				// Query string from stream
-				using (var reader = new StreamReader(listenerRequest.InputStream, listenerRequest.ContentEncoding))
-				{
-					var query = reader.ReadToEnd();
-					var kvs = query.Split('&');
-					for (int i = 0; i < kvs.Length; ++i)
-					{
-						var kv = kvs[i].Split('=');
-						this.Parameters[HttpUtility.UrlDecode(kv[0])] = HttpUtility.UrlDecode(kv[1]);
-					}
-				}
-			}
-			else if (listenerRequest.ContentType.ToLower().StartsWith("multipart/form-data;"))
-			{
-				var parser = new MultipartFormDataParser(listenerRequest.InputStream);
-
-				// POST
-				foreach (var kv in parser.Parameters)
-					this.Parameters[kv.Key] = kv.Value.Data;
-
-				// POST / Files
-				foreach (var file in parser.Files)
-					this.Files.Add(new FormFile(file.Name, file.FileName, file.Data, file.ContentType));
-			}
-			else
-			{
-				throw new Exception("Unknown content type '" + listenerRequest.ContentType + "'.");
+				var file = request.Files[key];
+				this.Files.Add(new FormFile(key, file.FileName, file.InputStream, file.ContentType));
 			}
 		}
 
@@ -152,6 +116,21 @@ namespace SharpExpress
 				return def;
 
 			return cookie.Value;
+		}
+
+		/// <summary>
+		/// Returns parameter value or default if parameter doesn't exist.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="def"></param>
+		/// <returns></returns>
+		public string Parameter(string name, string def = null)
+		{
+			var parameter = this.Parameters[name];
+			if (parameter == null)
+				return def;
+
+			return parameter;
 		}
 	}
 }

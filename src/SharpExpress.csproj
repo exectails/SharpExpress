@@ -41,6 +41,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="3rdParty\NHttp\HttpClient.cs" />
+    <Compile Include="3rdParty\NHttp\HttpContext.cs" />
+    <Compile Include="3rdParty\NHttp\HttpCookie.cs" />
+    <Compile Include="3rdParty\NHttp\HttpCookieCollection.cs" />
+    <Compile Include="3rdParty\NHttp\HttpExceptionEventHandler.cs" />
+    <Compile Include="3rdParty\NHttp\HttpFileCollection.cs" />
+    <Compile Include="3rdParty\NHttp\HttpMultiPartItem.cs" />
+    <Compile Include="3rdParty\NHttp\HttpMultiPartRequestParser.cs" />
+    <Compile Include="3rdParty\NHttp\HttpOutputStream.cs" />
+    <Compile Include="3rdParty\NHttp\HttpPostedFile.cs" />
+    <Compile Include="3rdParty\NHttp\HttpReadBuffer.cs" />
+    <Compile Include="3rdParty\NHttp\HttpRequest.cs" />
+    <Compile Include="3rdParty\NHttp\HttpRequestEventHandler.cs" />
+    <Compile Include="3rdParty\NHttp\HttpRequestParser.cs" />
+    <Compile Include="3rdParty\NHttp\HttpResponse.cs" />
+    <Compile Include="3rdParty\NHttp\HttpServer.cs" />
+    <Compile Include="3rdParty\NHttp\HttpServerState.cs" />
+    <Compile Include="3rdParty\NHttp\HttpServerUtility.cs" />
+    <Compile Include="3rdParty\NHttp\HttpUnknownRequestParser.cs" />
+    <Compile Include="3rdParty\NHttp\HttpUrlEncodedRequestParser.cs" />
+    <Compile Include="3rdParty\NHttp\HttpUtil.cs" />
+    <Compile Include="3rdParty\NHttp\NHttpException.cs" />
+    <Compile Include="3rdParty\NHttp\ProtocolException.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Engines\HtmlEngine.cs" />
@@ -98,6 +121,9 @@
     <Compile Include="Response.cs" />
     <Compile Include="Route.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="3rdParty\NHttp\Resources\InternalServerError.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
