@@ -72,7 +72,7 @@ namespace SharpExpress
 				Directory.CreateDirectory(folder);
 
 			using (var inFile = this.File)
-			using (var outFile = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
+			using (var outFile = new FileStream(filePath, FileMode.Create, FileAccess.Write))
 				inFile.CopyTo(outFile);
 
 			return true;
