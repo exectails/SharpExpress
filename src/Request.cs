@@ -42,6 +42,11 @@ namespace SharpExpress
 		public string Method { get; private set; }
 
 		/// <summary>
+		/// Requested path.
+		/// </summary>
+		public string Path { get; private set; }
+
+		/// <summary>
 		/// IP of the requesting client
 		/// </summary>
 		public string ClientIp { get { return _context.Request.RemoteEndPoint.Address.ToString(); } }
@@ -69,6 +74,7 @@ namespace SharpExpress
 		{
 			_context = context;
 			this.Method = _context.Request.HttpMethod.ToUpper();
+			this.Path = _context.Request.Path;
 
 			this.Parameters = new ValueCollection();
 			this.Files = new List<FormFile>();

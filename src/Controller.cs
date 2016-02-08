@@ -13,6 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
+using System.IO;
 using System.Net;
 
 namespace SharpExpress
@@ -20,5 +22,16 @@ namespace SharpExpress
 	public interface IController
 	{
 		void Index(Request req, Response res);
+	}
+
+	public class StaticController : IController
+	{
+		public virtual void Index(Request req, Response res)
+		{
+			var relativeFilePath = req.Path.TrimStart('/');
+			var fullFilePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativeFilePath)).Replace('\\', '/');
+
+			res.SendFile(fullFilePath);
+		}
 	}
 }

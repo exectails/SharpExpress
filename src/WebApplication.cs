@@ -34,7 +34,6 @@ namespace SharpExpress
 		private HttpServer _server;
 		private List<Route> _routes;
 		private Dictionary<string, IEngine> _engines;
-		private HashSet<string> _statics;
 
 		/// <summary>
 		/// Amount of requests handled
@@ -57,7 +56,6 @@ namespace SharpExpress
 
 			_engines = new Dictionary<string, IEngine>();
 			_engines.Add(DefaultEngine, new HtmlEngine());
-			_statics = new HashSet<string>();
 		}
 
 		/// <summary>
@@ -105,10 +103,6 @@ namespace SharpExpress
 
 				var req = new Request(context);
 				var res = new Response(this, context);
-
-				// Static
-				if (this.TryStatic(rawUrl, context, res))
-					return;
 
 				// Routes
 				this.Route(rawUrl, context, req, res);
@@ -201,39 +195,23 @@ namespace SharpExpress
 		#region Statics
 
 		/// <summary>
-		/// Adds static paths
+		/// Adds static path.
 		/// </summary>
-		/// <param name="paths"></param>
-		public void Static(params string[] paths)
+		/// <param name="path"></param>
+		public void Static(string path)
 		{
-			foreach (var path in paths)
-				_statics.Add(path.Replace('\\', '/').Trim('/'));
+			this.Static(path, new StaticController());
 		}
 
 		/// <summary>
-		/// Tries to handle the request as a static file. Returns true if successful.
+		/// Adds static path with given controller.
 		/// </summary>
-		/// <param name="rawUrl"></param>
-		/// <param name="context"></param>
-		/// <param name="res"></param>
-		/// <returns></returns>
-		private bool TryStatic(string rawUrl, HttpContext context, Response res)
+		/// <param name="path"></param>
+		/// <param name="controller"></param>
+		public void Static(string path, StaticController controller)
 		{
-			var relativeFilePath = rawUrl.TrimStart('/');
-			var fullFilePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativeFilePath)).Replace('\\', '/');
-
-			foreach (var s in _statics)
-			{
-				// Is in sub folder of static folder?
-				var staticFolderPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, s)).Replace('\\', '/') + '/';
-				if (!fullFilePath.StartsWith(staticFolderPath))
-					continue;
-
-				res.SendFile(fullFilePath);
-				return true;
-			}
-
-			return false;
+			path = "/" + path.Replace('\\', '/').Trim('/') + "/*";
+			this.Get(path, controller);
 		}
 
 		#endregion Statics
