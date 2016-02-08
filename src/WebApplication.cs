@@ -42,6 +42,11 @@ namespace SharpExpress
 		public int HandledRequests { get; protected set; }
 
 		/// <summary>
+		/// The HTTP server's end point.
+		/// </summary>
+		public IPEndPoint EndPoint { get; protected set; }
+
+		/// <summary>
 		/// New Web Application
 		/// </summary>
 		public WebApplication()
@@ -66,6 +71,7 @@ namespace SharpExpress
 			_server.RequestReceived += this.OnRequest;
 
 			_server.Start();
+			this.EndPoint = _server.EndPoint;
 		}
 
 		/// <summary>
