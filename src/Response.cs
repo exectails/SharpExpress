@@ -214,6 +214,7 @@ namespace SharpExpress
 				case ".jpeg": this.ContentType = "image/jpeg"; break;
 				case ".gif": this.ContentType = "image/gif"; break;
 				case ".png": this.ContentType = "image/png"; break;
+				case ".ico": this.ContentType = "image/x-icon"; break;
 
 				case ".htm":
 				case ".html": this.ContentType = "text/html"; break;
