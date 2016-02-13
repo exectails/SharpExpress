@@ -26,9 +26,20 @@ namespace SharpExpress
 
 	public class StaticController : IController
 	{
+		private string _filePath = null;
+
+		public StaticController()
+		{
+		}
+
+		public StaticController(string filePath)
+		{
+			_filePath = filePath;
+		}
+
 		public virtual void Index(Request req, Response res)
 		{
-			var relativeFilePath = req.Path.TrimStart('/');
+			var relativeFilePath = _filePath ?? req.Path.TrimStart('/');
 			var fullFilePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativeFilePath)).Replace('\\', '/');
 
 			res.SendFile(fullFilePath);
