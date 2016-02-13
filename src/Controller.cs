@@ -27,6 +27,7 @@ namespace SharpExpress
 	public class StaticController : IController
 	{
 		private string _filePath = null;
+		protected int _cache = 60 * 10;
 
 		public StaticController()
 		{
@@ -42,6 +43,8 @@ namespace SharpExpress
 			var relativeFilePath = _filePath ?? req.Path.TrimStart('/');
 			var fullFilePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativeFilePath)).Replace('\\', '/');
 
+			if (_cache > 0)
+				res.SetControlCache("public, max-age=" + _cache);
 			res.SendFile(fullFilePath);
 		}
 	}

@@ -236,5 +236,17 @@ namespace SharpExpress
 				fs.CopyTo(output);
 			}
 		}
+
+		/// <summary>
+		/// Sets control-cache header.
+		/// </summary>
+		/// <param name="val"></param>
+		/// <example>
+		/// SetControlCache("public, max-age=20");
+		/// </example>
+		public void SetControlCache(string val)
+		{
+			_context.Response.CacheControl = val;
+		}
 	}
 }
