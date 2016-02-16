@@ -69,13 +69,6 @@
     <Compile Include="Engines\HtmlEngine.cs" />
     <Compile Include="Engines\HandlebarsEngine.cs" />
     <Compile Include="FormFile.cs" />
-    <Compile Include="3rdParty\HttpMultipartParser\BinaryStreamStack.cs" />
-    <Compile Include="3rdParty\HttpMultipartParser\FilePart.cs" />
-    <Compile Include="3rdParty\HttpMultipartParser\MultipartFormDataParser.cs" />
-    <Compile Include="3rdParty\HttpMultipartParser\MultipartParseException.cs" />
-    <Compile Include="3rdParty\HttpMultipartParser\ParameterPart.cs" />
-    <Compile Include="3rdParty\HttpMultipartParser\RebufferableBinaryReader.cs" />
-    <Compile Include="3rdParty\HttpMultipartParser\SubsequenceFinder.cs" />
     <Compile Include="3rdParty\mustache-sharp\ArgumentCollection.cs" />
     <Compile Include="3rdParty\mustache-sharp\CompoundGenerator.cs" />
     <Compile Include="3rdParty\mustache-sharp\ConditionTagDefinition.cs" />
