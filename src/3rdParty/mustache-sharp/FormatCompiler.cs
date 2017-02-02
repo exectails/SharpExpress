@@ -26,6 +26,8 @@ namespace Mustache
 
 			IfTagDefinition ifDefinition = new IfTagDefinition();
 			_tagLookup.Add(ifDefinition.Name, ifDefinition);
+			UnlessTagDefinition unlessDefinition = new UnlessTagDefinition();
+			_tagLookup.Add(unlessDefinition.Name, ifDefinition);
 			ElifTagDefinition elifDefinition = new ElifTagDefinition();
 			_tagLookup.Add(elifDefinition.Name, elifDefinition);
 			ElseTagDefinition elseDefinition = new ElseTagDefinition();

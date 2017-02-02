@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="3rdParty\mustache-sharp\UnlessTagDefinition.cs" />
     <Compile Include="3rdParty\NHttp\HttpClient.cs" />
     <Compile Include="3rdParty\NHttp\HttpContext.cs" />
     <Compile Include="3rdParty\NHttp\HttpCookie.cs" />
